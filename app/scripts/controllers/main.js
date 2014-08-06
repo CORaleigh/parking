@@ -16,43 +16,65 @@
 //     ];
 //   });
 
-'use strict';
 
 angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
     function($scope, $http) {
-     $scope.mapData = {};
-     $scope.heatmapData = [];
+     $scope.mapData = { 
+     	"type": "FeatureCollection",
+    	"features": []
+	 };
+     $scope.metersData = {};
+     $scope.getStatus = function(area){
+     	$http.get('http://rhsoatstapp1:9292/area/' + area).success(function(res){
+     		console.log(res.Bay);
+     		$scope.metersData.area = res.Bay;
+     	});
+     };
+
+     
+
      $scope.getMapData = function (){
-     	 $http.get('http://50.116.33.197/chadfoley/spaces.geojson').success(function(res){
-     	 	console.log(res);
+     	// for (var i = 1; i <=7; i++){
+     		$http.get('http://rhsoatstapp1:9292/area/1/216').success(function(res){
+     	 	var areas = []; 
+     	 	for (var each in res){
+     	 		res[each].geometry.coordinates = JSON.parse(res[each].geometry.coordinates);
+     	 		console.log(res[each].geometry.coordinates);
+     	 		$scope.mapData.features.push(res[each]);
+     	 	} 
+     	 	console.log($scope.mapData);
      	 	angular.extend($scope, {
 	            geojson: {
-	                data: res,
+	                data: $scope.mapData,
 	                onEachFeature: function (feature, layer){
-	                	layer.bindPopup('<h1>Block :' + feature.properties.BLOCK + '</h1><h1>Meter :' + feature.properties.METER + '</h1>' );
+	                	layer.bindPopup('<h1>Status :' + feature.properties.STATUS + '</h1><pre><h3>Street :' + feature.properties.STREET + '</h3><h3>Time :' + feature.properties.TIME + '</h3></pre>' );
 	                },
 	                pointToLayer: function (feature, latlng) {
-	   					return L.circleMarker(latlng, {
-	    					fillColor: '#3366FF',
-				    		radius: 5,
-				    		color: '#3300FF',
-				    		weight: 1,
-				    		fillOpacity: .7
-				    	});
-					}		
+	   						return L.circleMarker(latlng, {
+	    						fillColor: '#3366FF',
+				    			radius: 5,
+				    			color: '#3300FF',
+				    			weight: 1,
+				    			fillOpacity: .7
+				    		});
+					}
 				} //Ends geojson object
         	}); //Ends extend scope
+     	 	
+     	 	
         
         });//Ends Get
      	 
+     	 
+     	 
          //Adds Icons to map
-    angular.extend($scope, {
-        icons: localIcons
-    });
-//Addes Markers to map
-    angular.extend($scope, {
-        markers: $scope.mapData
-    });
+//     angular.extend($scope, {
+//         icons: localIcons
+//     });
+// //Addes Markers to map
+//     angular.extend($scope, {
+//         markers: $scope.mapData
+//     });
 
     angular.extend($scope, {
         layers: {
