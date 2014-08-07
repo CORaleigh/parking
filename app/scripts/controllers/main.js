@@ -19,9 +19,10 @@
 
 angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
     function($scope, $http) {
+    $scope.viewData = null;
      $scope.mapData = { 
-     	"type": "FeatureCollection",
-    	"features": []
+     	'type': 'FeatureCollection',
+    	'features': []
 	 };
      $scope.metersData = {};
      $scope.getStatus = function(area){
@@ -31,12 +32,33 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
      	});
      };
 
-     
+    var styles = {
+        paidStyle : {
+            fillColor: '#aa3939',
+            radius: 5,
+            color: '#550000',
+            weight: 1,
+            fillOpacity: 0.7
+        },
+        expiredStyle : {
+            fillColor: '#7c84ae',
+            radius: 5,
+            color: '#313c74',
+            weight: 1,
+            fillOpacity: 0.7
+        },
+        hoverStyle: {
+            fillColor: '#0ab25d',
+            radius: 5,
+            color: '#0ab25d',
+            weight: 1,
+            fillOpacity: 0.7
+        }
+    };
 
      $scope.getMapData = function (){
      	// for (var i = 1; i <=7; i++){
-     		$http.get('http://rhsoatstapp1:9292/area/1/216').success(function(res){
-     	 	var areas = []; 
+     		$http.get('http://rhsoatstapp1:9292/area/1/216').success(function(res){ 
      	 	for (var each in res){
      	 		res[each].geometry.coordinates = JSON.parse(res[each].geometry.coordinates);
      	 		console.log(res[each].geometry.coordinates);
@@ -48,16 +70,21 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
 	                data: $scope.mapData,
 	                onEachFeature: function (feature, layer){
 	                	layer.bindPopup('<h1>Status :' + feature.properties.STATUS + '</h1><pre><h3>Street :' + feature.properties.STREET + '</h3><h3>Time :' + feature.properties.TIME + '</h3></pre>' );
+                        
+                            if (feature.properties.STATUS === 'paid'){
+                                layer.setStyle(styles.paidStyle);
+                            }
+                            else if (feature.properties === 'expired') {
+                                layer.setStyle(styles.expiredStyle);
+                            }
+                        layer.on('mouseover', function () {
+                            $scope.viewData = feature.properties;
+                         });
 	                },
 	                pointToLayer: function (feature, latlng) {
-	   						return L.circleMarker(latlng, {
-	    						fillColor: '#3366FF',
-				    			radius: 5,
-				    			color: '#3300FF',
-				    			weight: 1,
-				    			fillOpacity: .7
-				    		});
-					}
+	   						return L.circleMarker(latlng, styles.expiredStyle);
+					},
+                    resetStyleOnMouseout: true
 				} //Ends geojson object
         	}); //Ends extend scope
      	 	
@@ -97,14 +124,7 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
     });
      };
      $scope.getMapData();
-    	var localIcons = {
-        defaultIcon: {},
-        googleFiberRabbit: {
-            iconUrl: 'images/googleFiberIcon.png',
-            iconSize:     [75, 75],
-            shadowSize:   [0, 0]
-        }
-    };
+    	
 
 
          angular.extend($scope, {
@@ -115,8 +135,8 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
                 },
                 legend: {
                 position: 'bottomleft',
-                colors: [ '#3366FF'],
-                labels: [ 'Parking Spot' ]
+                colors: [ '#313c74', '#aa3939' ],
+                labels: [ 'Avaliable Parking Spot', 'Unavaliable Parking Spot' ]
             }
                 
           
