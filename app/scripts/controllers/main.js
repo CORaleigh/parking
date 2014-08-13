@@ -145,7 +145,7 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
                 },
                 legend: {
                 position: 'bottomleft',
-                colors: [ '#313c74', '#aa3939' ],
+                colors: [ '#37D60F', '#aa3939' ],
                 labels: [ 'Avaliable Parking Spot', 'Unavaliable Parking Spot' ]
             }
                 
