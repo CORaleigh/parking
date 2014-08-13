@@ -1,9 +1,4 @@
-/* Space out content a bit */
-body {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
-
+body {margin:0; padding:0; background:#efefef; font:100%/1.618 sans-serif; color:#444;}
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
@@ -26,17 +21,17 @@ body {
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
 }
 
-/* Customize container */
-@media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
+.container {
+  text-align:center;
 }
+li {list-style:none; text-align:left;}
+label {color:#777;}
+.ally {position:absolute;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);padding:0;border:0;height:1px;width:1px;overflow:hidden}
+
 .container-narrow > hr {
   margin: 30px 0;
 }
@@ -77,59 +72,319 @@ body {
     border-bottom: 0;
   }
 }
-/*.header {
-            overflow: hidden;
-            position: relative;
-            height: inherit;
-            width: 100%;
-            background-position: 30% 50%;
-            background: url(../images/Skyline1.png) bottom no-repeat;
-        }
-.header img {
-    max-height: 80px;
-    margin-top: 20px;
-}*/
 .legend {
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    background: rgba(255,255,255, 0.9);
-    line-height: 18px;
-    border-radius: 5px;
-    color: #555;
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  background: rgba(255,255,255, 0.9);
+  line-height: 18px;
+  border-radius: 5px;
+  color: #555;
 }
-
 .legend i {
-    color: #777;
-    width: 18px;
-    height: 18px;
-    float: left;
-    margin-right: 8px;
-    opacity: 0.7;
+  color: #777;
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+div.box {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  z-index: 100;
+  padding: 1em;
+  text-align: center;
+}
+div.country {
+  font-size: 2em;
+  font-weight: bold;
+  position: absolute;
+  bottom: 1em;
+  left: 1em;
+  z-index: 100;
+  padding: .2em .5em;
+  line-height: 1.1em;
+  text-align: center;
+}
+.info {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+}
+*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+body{
+  font-size:100%/1.5;
+  font-family: 'Lato', sans-serif;
+  color:#515151;
+  background:#ECECEC;
+}
+a {
+  color:#00B4FF;
+  text-decoration:none;
+}
+a:hover{
+  cursor:pointer;
+}
+ul {
+  margin:0;
+  padding:0;
+}
+li {
+  list-style:none;
+  text-align:left;
+}
+label {
+  text-align:left;
+}
+li {
+  display: block;
+  position: relative;
+  max-width: 100%;
+  margin-bottom: 10px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-align:center;
+}
+input[type=text], select {
+  width:90%;
+  height: 50px;
+  margin-bottom: 1em;
+  padding:0.25em 1em;
+  font-size:1.1em;
+  border: 2px solid #dedede;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 -2px #dedede;
+  box-shadow: inset 0 -2px #dedede;
+}
+header, .header {
+  background:#3c61a5;
+  padding:1em;
+  position: relative;
+  z-index: 1;
+  line-height: 4em;
+  text-align: center;
+  border-bottom: 0.25em solid #23488C;
+  -webkit-box-shadow: inset 0 -1px rgba(255,255,255,0.05),0 1px rgba(0,0,0,0.05);
+  box-shadow: inset 0 -1px rgba(255,255,255,0.05),0 1px rgba(0,0,0,0.05);
+}
+h1{
+  font-size: 2em;
+  font-weight:normal;
+  color:#fff;
+  text-shadow: 2px 8px 6px rgba(0,0,0,0.2);
+}
+h2{
+  font-size:2em;
+  font-weight:normal;
+  display: inline;
+  float:left;
+  vertical-align: middle;
+  text-shadow: 2px 2px 3px rgba(255,255,255,0.1);
+}
+h3 {
+  font-size:1.5em;
+}
+h1, h2, h3 {
+  margin:0;
+}
+.review .rating {
+  display:inline-block;
+}
+.rating li{
+  font-size:1.5em;
+}
+footer{
+  height:2em;
+  display: table;
+  width:100%;
+  margin-bottom:1em;
+}
+footer p{
+  display: table-cell;
+  text-align:center;
+  vertical-align: middle;
+}
+.icon-phone, .icon-mobile, .icon-location {
+  font-size:1.1em;
+}
+.image{
+  width:24%;
+  display:inline-block;
+  vertical-align: middle;
+}
+.person img{
+  border-radius:100px;
+  width:100%;
+  max-width:100px;
+  max-height:100px;
+}
+.contactInfo{
+  position:relative;
+  width: 74%;
+  display: inline-block;
+  vertical-align: middle;
+  padding:0 2%;
+}
+.person ul {
+  width: 100%;
+  display: inline-block;
+}
+.contactInfo li {
+  padding:0.2em;
+}
+.error{
+  color:#e53e2d;
+  font-weight:700;
+}
+ button, .button{
+  display: inline-block;
+  padding: .5em 1em;
+  margin:0 auto 1em;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  position: relative;
+  vertical-align: top;
+  width: 90%;
+  height: 54px;
+  padding: 0;
+  font-size: 1.4em;
+  color: white;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  background: #657838;
+  border: 0;
+  border-bottom: 2px solid #4C5F1F;
+  border-radius: 5px;
+  cursor: pointer;
+  -webkit-box-shadow: inset 0 -2px #4C5F1F;
+  box-shadow: inset 0 -2px #4C5F1F;
+ }
+@media only screen and (min-width: 40em) {
+  h1{
+  font-size: 3em;
+  }
+  .wrapper{
+  width:70%;
+  margin: 0 auto;
+  }
+  .person .icon-user:before {
+  font-size:100px;
+  width:100px;
+  }
+  .contactInfo > ul {
+    width:49%;
+    vertical-align:top;
+  }
+}
+.location {
+  overflow: hidden;
+  margin-top:1.5em;
+  position: relative;
+  -webkit-transition: 2s;
+  max-height: 150px;
+  transition: 1s;
+}
+.hidden {
+  max-height: 0px;
+}
+#ErrorMessage{
+  color:red;
 }
 
-div.box {
-            position: absolute;
-            top: 1em;
-            right: 1em;
-            z-index: 100;
-            padding: 1em;
-            text-align: center;
-        }
+.location ul {
+  text-align: center;
+  padding: 1em;
+  background: #8d8d8d;
+  background: rgba(0, 0, 0, .4);
+  box-shadow: inset 0 8px 8px -8px rgba(0, 0, 0, 0.4),inset 0 -8px 8px -8px rgba(0, 0, 0, 0.4);
+  max-height: 100px;
+  color: white;
+  transition: height 1s;
+}
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-bottom: 1em solid #555;
+  border-left: 1em solid transparent;
+  border-right: 1em solid transparent;
+  margin: 0;
+  left: 26%;
+  position: absolute;
+  top: -1em;
+}
+article section{
+  padding:0.5em;
+}
+article {
+  margin:0.5em 0.5em 4em 0.5em;
+}
+hr {
+  clear:both;
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
-        div.country {
-            font-size: 2em;
-            font-weight: bold;
-            position: absolute;
-            bottom: 1em;
-            left: 1em;
-            z-index: 100;
-            padding: .2em .5em;
-            line-height: 1.1em;
-            text-align: center;
-        }
+}
+@font-face {
+  font-family: 'icomoon';
+  src:url('../fonts/icomoon.eot');
+  src:url('../fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf') format('truetype'),
+    url('../fonts/icomoon.woff') format('woff'),
+    url('../fonts/icomoon.svg#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
-.info {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 5px;
-        }
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-mail:after {
+  content: "\e600";
+  margin-left:0.25em;
+  font-size:0.8em;
+}
+.icon-mobile:before {
+  content: "\e601";
+  margin-right:0.25em;
+}
+.icon-user:before {
+  content: "\e602";
+  font-size:3.5em;
+  vertical-align:middle;
+  text-align:center;
+  width:100%;
+  display:inline-block;
+}
+.icon-phone:before {
+  content: "\e603";
+  margin-right:0.25em;
+}
+.icon-location:before {
+  content: "\e604";
+  margin-right:0.25em;
+}
+.icon-search:after {
+  content: "\e605";
+  margin-right:0.25em;
+}
+button:hover, .button:hover {
+background: #586B2B;
+}
+button:active, .button:active {
+border:0;
+box-shadow:none;
+}
