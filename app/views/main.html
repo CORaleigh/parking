@@ -1,3 +1,6 @@
-<div ng-show="viewData"><h2 class="text-primary"><strong class='text-sucess'>{{ viewData.STATUS || 'Check a space'}}</strong></h2></div>
-        
+
+<div ng-show="viewData">
+	<h2 class="text-primary">
+		<strong class='text-sucess'>{{ viewData.STATUS || 'Check a space'}}</strong></h2></div>
+    
 <leaflet center="Raleigh" markers="markers" geojson="geojson" layers="layers" legend="legend" width="800" height="600"></leaflet>

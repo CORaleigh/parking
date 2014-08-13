@@ -19,18 +19,19 @@
 
 angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
     function($scope, $http) {
+    $scope.test = null;
     $scope.viewData = null;
      $scope.mapData = { 
      	'type': 'FeatureCollection',
     	'features': []
 	 };
      $scope.metersData = {};
-     $scope.getStatus = function(area){
-     	$http.get('http://rhsoatstapp1:9292/area/' + area).success(function(res){
-     		console.log(res.Bay);
-     		$scope.metersData.area = res.Bay;
-     	});
-     };
+     // $scope.getStatus = function(area){
+     // 	$http.jsonp('http://rhsoatstapp1:9292/area/' + area + '?callback=JSON_CALLBACK&name=Super%20Hero').success(function(res){
+     // 		console.log(res.Bay);
+     // 		$scope.metersData.area = res.Bay;
+     // 	});
+     // };
 
     var styles = {
         paidStyle : {
@@ -41,7 +42,7 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
             fillOpacity: 0.7
         },
         expiredStyle : {
-            fillColor: '#7c84ae',
+            fillColor: '#37D60F',
             radius: 5,
             color: '#313c74',
             weight: 1,
@@ -58,11 +59,13 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
 
      $scope.getMapData = function (){
      	// for (var i = 1; i <=7; i++){
-     		$http.get('http://rhsoatstapp1:9292/area/1/216').success(function(res){ 
-     	 	for (var each in res){
-     	 		res[each].geometry.coordinates = JSON.parse(res[each].geometry.coordinates);
-     	 		console.log(res[each].geometry.coordinates);
-     	 		$scope.mapData.features.push(res[each]);
+            // var config = { headers: {'Content-Type': 'application/json'}};
+     		$http.jsonp('http://rhsoatstapp1:9292/area/1/216?callback=JSON_CALLBACK').success(function(data, status, headers, config){ 
+                console.log(data);
+     	 	for (var each in data){
+     	 		// data[each].geometry.coordinates = JSON.parse(data[each].geometry.coordinates);
+     	 		// console.log(res[each].geometry.coordinates);
+     	 		$scope.mapData.features.push(data[each]);
      	 	} 
      	 	console.log($scope.mapData);
      	 	angular.extend($scope, {
@@ -90,7 +93,14 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
      	 	
      	 	
         
-        });//Ends Get
+        }).error( function(data, status, headers, config, statusText){
+            console.log('Error');
+            console.log(data);
+            console.log(status);
+            console.log(headers);
+            console.log(config);
+            console.log(statusText);
+});//Ends Get
      	 
      	 
      	 
@@ -112,14 +122,14 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
                             type: 'xyz'
                         }
                     },
-                    overlays: {
-                        heatmap: {
-                            name: 'Heat Map',
-                            type: 'heatmap',
-                            data: $scope.heatmapData,
-                            visible: false
-                        }
-                    }
+                    // overlays: {
+                    //     heatmap: {
+                    //         name: 'Heat Map',
+                    //         type: 'heatmap',
+                    //         data: $scope.heatmapData,
+                    //         visible: false
+                    //     }
+                    // }
                 }
     });
      };

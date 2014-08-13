@@ -69,7 +69,24 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: 'localhost',
-        livereload: 35729
+        livereload: 35729,
+    // middleware: function(connect, options) {
+    //   return [
+    //     function(req, res, next) {
+    //       res.setHeader('Access-Control-Allow-Credentials', true);
+    //       res.setHeader('Access-Control-Allow-Origin', '*');
+    //       res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    //       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    //       // don't just call next() return it
+    //       return next();
+    //     },
+
+    //     // add other middlewares here 
+    //     connect.static(require('path').resolve('.'))
+
+    //   ];
+    // }
       },
       livereload: {
         options: {
@@ -83,10 +100,11 @@ module.exports = function (grunt) {
               ),
               connect.static(appConfig.app),
               function(req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Methods', '*');
-            next();
-          }
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', '*');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+                next();
+              }
             ];
           }
         }
@@ -102,7 +120,13 @@ module.exports = function (grunt) {
                 '/bower_components',
                 connect.static('./bower_components')
               ),
-              connect.static(appConfig.app)
+              connect.static(appConfig.app),
+              // function(req, res, next) {
+              //   res.setHeader('Access-Control-Allow-Origin', '*');
+              //   res.setHeader('Access-Control-Allow-Methods', 'GET');
+              //   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+              //   next();
+              // }
             ];
           }
         }
