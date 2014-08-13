@@ -120,6 +120,11 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
                             name: 'OpenStreetMap',
                             url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                             type: 'xyz'
+                        },
+                        mapbox: {
+                            name: 'mapbox',
+                            url: 'http://{s}.tiles.mapbox.com/v3/tmcw.map-7s15q36b/{z}/{x}/{y}.png',
+                            type: 'xyz'
                         }
                     },
                     // overlays: {
