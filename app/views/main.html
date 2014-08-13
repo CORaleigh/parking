@@ -1,6 +1,11 @@
+<div class="row">
+  <div class="col-md-6"><leaflet center="Raleigh" markers="markers" geojson="geojson" layers="layers" legend="legend" width="800" height="600"></leaflet></div>
+  <div class="col-md-6">
+  	<div ng-show="viewData">
+		<h2 class="text-primary pull-right">
+			<strong class='text-sucess'>{{ viewData.STATUS || 'Check a space'}}</strong></h2></div>
+		</div>
+	</div>
 
-<div ng-show="viewData">
-	<h2 class="text-primary">
-		<strong class='text-sucess'>{{ viewData.STATUS || 'Check a space'}}</strong></h2></div>
     
-<leaflet center="Raleigh" markers="markers" geojson="geojson" layers="layers" legend="legend" width="800" height="600"></leaflet>
+
