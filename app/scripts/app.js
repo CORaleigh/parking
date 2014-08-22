@@ -27,6 +27,10 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/find', {
+        templateUrl: 'views/find.html',
+        controller: 'FindController'
+      })
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'

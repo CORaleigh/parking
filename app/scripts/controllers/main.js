@@ -72,8 +72,8 @@ angular.module('parkingApp').controller('MainCtrl', ['$scope', '$http',
 	            geojson: {
 	                data: $scope.mapData,
 	                onEachFeature: function (feature, layer){
-	                	layer.bindPopup('<h1>Status :' + feature.properties.STATUS + '</h1><pre><h3>Street :' + feature.properties.STREET + '</h3><h3>Time :' + feature.properties.TIME + '</h3></pre>' );
-                        
+	                	layer.bindPopup('<h1>Status :' + feature.properties.STATUS + '</h1><pre><h3>Street :' + feature.properties.STREET + '</h3><h3>Time :' + feature.properties.TIME + '</h3></pre>');
+                        // '<h1>Status :' + feature.properties.STATUS + '</h1><pre><h3>Street :' + feature.properties.STREET + '</h3><h3>Time :' + feature.properties.TIME + '</h3></pre>'
                             if (feature.properties.STATUS === 'paid'){
                                 layer.setStyle(styles.paidStyle);
                             }
