@@ -1,7 +1,7 @@
 <div class="header">
         <h1>Find a Parking Spot</h1>
       </div>
-      <form name="findForm" ng-submit="getDirections(findForm)">
+      <form ng-hide="map" name="findForm" ng-submit="getDirections(findForm)">
         <ul>
           <li>
             <label>Enter Origin</label>
@@ -20,4 +20,7 @@
           </li>
         </ul>
       </form>
-      <pre>{{directions}}</pre>
+      <!-- <pre>{{directions}}</pre> -->
+      <div ng-show="map">
+        <leaflet center="Raleigh" paths="paths" width="800" height="600"></leaflet>
+      </div>
