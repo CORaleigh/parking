@@ -1,50 +1,150 @@
 'use strict';
 
 angular.module('parkingApp')
-  .controller('FindController', ['$scope', '$http', 'leafletBoundsHelpers',
-    function($scope, $http, leafletBoundsHelpers){
+  .controller('FindController', ['$scope', '$http', 'leafletBoundsHelpers', 'leafletData',
+    function($scope, $http, leafletBoundsHelpers, leafletData){
+
+        //HTML5 Geolocation
+        $scope.myPosition = null;
+        $scope.getLocation = function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                 $scope.myPosition = "Geolocation is not supported by this browser.";
+            }
+        }
+        function showPosition(position) {
+            console.log(position);
+             $scope.myPosition = position.coords.latitude + ", " + position.coords.longitude; 
+             console.log($scope.myPosition);
+             angular.extend($scope, {
+                markers: {
+                    mylocatoin: {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    }
+                },
+                Raleigh: {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    zoom: 17
+                }
+             });
+        };
+       
+        
         $scope.map = false;
+        $scope.noResults = {status: false, message: null};
+
         angular.extend($scope,{
             Raleigh:{
                 lat: 35.779595,
                 lng:-78.638269,
                 zoom: 14
-            }
+            },
+            layers: {
+                    baselayers: {
+                        osm: {
+                            name: 'OpenStreetMap',
+                            url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            type: 'xyz'
+                        },
+                        mapbox: {
+                            name: 'mapbox',
+                            url: 'http://{s}.tiles.mapbox.com/v3/tmcw.map-7s15q36b/{z}/{x}/{y}.png',
+                            type: 'xyz'
+                        }
+                    }
+            },        
+            paths: {},
+            markers: {}
         });
     	$scope.getDirections = function (data) {
     		$scope.directions = null;
-    		var conf = {origin: data.from, destination: data.to, region: 'us'};
+            var pathcoords = {
+                            p1: {
+                                color: '#008000',
+                                weight: 8,
+                                latlngs: [],
+                            }    
+                    };
+            var mapMarkers = {
+                        start: {
+                            lat: null,
+                            lng: null,
+                            message: data.from
+                        },
+                        stop: {
+                            lat: null,
+                            lng: null,
+                            message: data.to
+                        }
+                        
+            };
+            if ($scope.myPosition === null){
+                var conf = {origin: data.from, destination: data.to, region: 'us'};
+            } else {
+                var conf = {origin: $scope.myPosition, destination: data.to, region: 'us'};
+            }
+    		
     		$http.get('https://maps.googleapis.com/maps/api/directions/json?', {params: conf}).success(function(res){
     			console.log(res);
-    			$scope.directions = res.routes[0].legs[0].steps;
-                for (var i in res.routes[0].legs[0].steps){
-                    var polyline = L.Polyline.fromEncoded(res.routes[0].legs[0].steps[i].polyline.points);
-                    res.routes[0].legs[0].steps[i].polyline.points = polyline;
-                    console.log(res.routes[0].legs[0].steps[i].polyline.points);
+                if (res.status === 'NOT_FOUND' || res.status === 'ZERO_RESULTS'){
+                    $scope.noResults.status = true;
+                    $scope.noResults.message = 'Please enter a differnt address...\nNo results found';
                 }
-                var ne = [res.routes[0].bounds.northeast.lat, res.routes[0].bounds.northeast.lng];
-                var sw = [res.routes[0].bounds.southwest.lat, res.routes[0].bounds.southwest.lng];
-                console.log([ne, sw]);
-                var bounds = leafletBoundsHelpers.createBoundsFromArray([ne, sw]);
-                // var paths: {
-                //         p1: {
-                //             color: '#008000',
-                //             weight: 8,
-                //             latlngs: [
-                //                 { lat: 51.50, lng: -0.082 },
-                //                 { lat: 48.83, lng: 2.37 },
-                //                 { lat: 41.91, lng: 12.48 }
-                //             ],
-                //         }
-                // };
+                else if (res.status === 'OK'){
+                    $scope.map = true;
+                    $scope.noResults.status = false;
+        			$scope.directions = res.routes[0].legs[0].steps;
+                    for (var i in res.routes[0].legs[0].steps){
+                        var polyline = L.Polyline.fromEncoded(res.routes[0].legs[0].steps[i].polyline.points);
+                        res.routes[0].legs[0].steps[i].polyline.points = polyline;
+                        console.log(res.routes[0].legs[0].steps[i].polyline.points);
+                        pathcoords.p1.latlngs.push({lat: res.routes[0].legs[0].steps[i].polyline.points._latlngs[0].lat, lng: res.routes[0].legs[0].steps[i].polyline.points._latlngs[0].lng });
+                    }
+                    //Summary
+                    $scope.mapSummary = {
+                        distance: res.routes[0].legs[0].distance.text,
+                        time: res.routes[0].legs[0].duration.text
+                    };
+                    //Markers
+                    mapMarkers.start.lat = res.routes[0].legs[0].start_location.lat;
+                    mapMarkers.start.lng = res.routes[0].legs[0].start_location.lng;
+                    mapMarkers.stop.lat = res.routes[0].legs[0].end_location.lat;
+                    mapMarkers.stop.lng = res.routes[0].legs[0].end_location.lng;
+
+
+                    //Bounds
+                    var ne = [res.routes[0].bounds.northeast.lat, res.routes[0].bounds.northeast.lng];
+                    var sw = [res.routes[0].bounds.southwest.lat, res.routes[0].bounds.southwest.lng];
+                    console.log([ne, sw]);
+                    var bounds = [ne, sw] 
+
+                    //Allows access to map element
+                    leafletData.getMap().then(function(map) {
+                        //Fits map to route bounds
+                        map.fitBounds(bounds);
+                        //Adds circle marker for circle in buffer analysis
+                        L.circle([res.routes[0].legs[0].end_location.lat, res.routes[0].legs[0].end_location.lng], 500, {
+                            color: 'red',
+                            fillColor: '#f03',
+                            fillOpacity: 0.5
+                        }).addTo(map);
+                    });
+          
+
+                    angular.extend($scope, {
+                        paths: pathcoords,
+                        markers: mapMarkers
+                    });
+                    
+                    
+                  }  
+        		});
+            
                 
-                angular.extend($scope, {
-                    bounds: bounds,
-                    paths: paths
-                });
-                
-    		});
-            $scope.map = true;
-    	}
+           
+    	};
     	
   }]);

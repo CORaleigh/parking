@@ -1,15 +1,22 @@
 <div class="header">
         <h1>Find a Parking Spot</h1>
+
       </div>
+      <div class="row">
+        <div class="col-md-5">
       <form ng-hide="map" name="findForm" ng-submit="getDirections(findForm)">
         <ul>
           <li>
+            <label>Use Location</label>
+              <button class="btn btn-primary btn-xs" type="button" ng-click="getLocation()"><span class="glyphicon glyphicon-screenshot">  {{myPosition}}</span></button>
+          </li>
+          <li ng-hide="myPosition">
             <label>Enter Origin</label>
-            <input type="text" ng-model="findForm.from" placeholder="My Location" />
+              <input type="text" value="2004 Ruffin St Raleigh NC" ng-model="findForm.from" placeholder="My Location"  />
           </li>
           <li>
             <label>Enter Destination</label>
-            <input type="text" ng-model="findForm.to" placeholder="222 W Hargett Street" />
+            <input  type="text" value="Hq Raleigh NC" ng-model="findForm.to" placeholder="222 W Hargett Street" />
           </li>
           <li>
             <label class="ally">Find my location</label>
@@ -21,6 +28,37 @@
         </ul>
       </form>
       <!-- <pre>{{directions}}</pre> -->
+      
+          
       <div ng-show="map">
-        <leaflet center="Raleigh" paths="paths" width="800" height="600"></leaflet>
+        <h2>{{findForm.to}} - Distance: {{mapSummary.distance}}, Time: {{mapSummary.time}}</h2>
+        <table class="table table-hover">
+         <!--  <thead>
+            <th>
+              <td>{{findForm.to}}</td>
+              <td>Distance: {{mapSummary.distance}}</td>
+              <td>Time: {{mapSummary.time}}</td>
+            </th>
+          </thead> -->
+          <tbody>
+            <tr>
+              <td><h3>Best Street - 10 Parking Spots</h3></td>
+            </tr>
+            <tr>
+              <td><h3>Ok Street - 5 Parking Spots</h3></td>
+            </tr>
+            <tr>
+              <td><h3>Worst Street - 0 Parking Spots</h3></td>
+            </tr>
+          </tbody>
+
+      </table>
+      </div>
+          <div>
+            <div ng-show="noResults.status"><pre><h1>{{noResults.message}}</h1></pre></div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <leaflet center="Raleigh" paths="paths" markers="markers" layers="layers" geojson="geojson" width="650" height="600" ></leaflet>
+        </div>
       </div>
