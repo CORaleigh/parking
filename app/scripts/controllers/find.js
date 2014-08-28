@@ -1,9 +1,13 @@
 'use strict';
 
+angular.module('parkingApp').config(['$httpProvider', function($httpProvider) {
+    // $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+    delete $httpProvider.defaults.headers.common["X-Requested-With"];
+}]);
+
 angular.module('parkingApp')
   .controller('FindController', ['$scope', '$http', 'leafletBoundsHelpers', 'leafletData',
     function($scope, $http, leafletBoundsHelpers, leafletData){
-
         //HTML5 Geolocation
         $scope.myPosition = null;
         $scope.getLocation = function () {
@@ -21,7 +25,13 @@ angular.module('parkingApp')
                 markers: {
                     mylocatoin: {
                         lat: position.coords.latitude,
-                        lng: position.coords.longitude
+                        lng: position.coords.longitude,
+                        label: {
+                            message: "Origin",
+                            options: {
+                                noHide: true
+                            }
+                        }
                     }
                 },
                 Raleigh: {
@@ -86,7 +96,6 @@ angular.module('parkingApp')
             } else {
                 var conf = {origin: $scope.myPosition, destination: data.to, region: 'us'};
             }
-    		
     		$http.get('https://maps.googleapis.com/maps/api/directions/json?', {params: conf}).success(function(res){
     			console.log(res);
                 if (res.status === 'NOT_FOUND' || res.status === 'ZERO_RESULTS'){
