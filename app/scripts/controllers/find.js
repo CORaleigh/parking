@@ -131,7 +131,6 @@ angular.module('parkingApp')
                     mapMarkers.stop.lat = res.routes[0].legs[0].end_location.k;
                     mapMarkers.stop.lng = res.routes[0].legs[0].end_location.B;
 
-                    console.log(res.routes[0].bounds.Ca.j)
                     //Bounds
                     var ne = [res.routes[0].bounds.Ca.j, res.routes[0].bounds.pa.j];
                     var sw = [res.routes[0].bounds.Ca.k, res.routes[0].bounds.pa.k];
@@ -143,11 +142,23 @@ angular.module('parkingApp')
                         //Fits map to route bounds
                         map.fitBounds(bounds);
                         //Adds circle marker for circle in buffer analysis
-                        L.circle([res.routes[0].legs[0].end_location.k, res.routes[0].legs[0].end_location.B], 500, {
+                        var x = res.routes[0].legs[0].end_location.k;
+                        var y = res.routes[0].legs[0].end_location.B;
+                        var searchCircle = L.circle([x, y], 500, {
                             color: 'red',
                             fillColor: '#f03',
                             fillOpacity: 0.5
                         }).addTo(map);
+
+                        //Creates circle as polygon for point in polygon
+                        var circlePolygon = getCirclePoints(x, y, 0.0025, 30);
+                        var buffer = L.polygon(circlePolygon, {
+                                color: 'red', 
+                                fillColor: '#274DCC',
+                                fillOpacity: 0.5
+                            }).addTo(map);
+                        $scope.getNearbySpaces(buffer);
+                        
                     });
           
 
@@ -162,6 +173,35 @@ angular.module('parkingApp')
             
                 
            
-    	};
+    	};//End of getDirections
+
+
+            function getCirclePoints(centerX,centerY,radius,segments){
+                var totalPoints=new Array();
+                for(var i=0;i<segments;i++){
+                   var x=centerX+radius*Math.sin(i*2*Math.PI/segments);
+                   var y=centerY+radius*Math.cos(i*2*Math.PI/segments);
+                    totalPoints.push([x, y]);
+                }
+                console.log(totalPoints);
+                return totalPoints;
+            };  
+
+        $scope.parkingInfo = {nearby: 0, outofarea: 0};
+        $scope.getNearbySpaces = function (searchArea){
+            //Checks for nearby parking spaces
+            $http.jsonp('http://rhsoatstapp1:9292/area/1/216?callback=JSON_CALLBACK', {cache: true}).success(function(data, status, headers, config){ 
+                console.log(data);
+                for (var each in data){
+                    var spot = data[each].geometry.coordinates;
+                    if (searchArea.getBounds().contains(spot)){
+                        $scope.parkingInfo.nearby+=1;
+                        console.log('OH YEAH');
+                    }else{
+                        $scope.parkingInfo.outofarea+=1;
+                    }
+                }       
+            });
+        };
   	
   }]);
