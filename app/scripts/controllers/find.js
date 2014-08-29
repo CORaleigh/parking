@@ -92,12 +92,20 @@ angular.module('parkingApp')
                         
             };
             if ($scope.myPosition === null){
-                var conf = {origin: data.from, destination: data.to, region: 'us'};
+                var conf = {origin: data.from, destination: data.to, region: 'us', travelMode: google.maps.TravelMode.DRIVING};
             } else {
-                var conf = {origin: $scope.myPosition, destination: data.to, region: 'us'};
+                var conf = {origin: $scope.myPosition, destination: data.to, region: 'us', travelMode: google.maps.TravelMode.DRIVING};
             }
-    		$http.get('https://maps.googleapis.com/maps/api/directions/json?', {params: conf}).success(function(res){
-    			console.log(res);
+
+            var directionsService = new google.maps.DirectionsService();
+            directionsService.route(conf, function(res, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    // directionsDisplay.setDirections(result);
+                    console.log(res);
+                }
+            // });
+    		// $http.post('http://maps.googleapis.com/maps/api/directions/json?', {params: conf}).success(function(res){
+    		// 	console.log(res);
                 if (res.status === 'NOT_FOUND' || res.status === 'ZERO_RESULTS'){
                     $scope.noResults.status = true;
                     $scope.noResults.message = 'Please enter a differnt address...\nNo results found';
@@ -118,15 +126,15 @@ angular.module('parkingApp')
                         time: res.routes[0].legs[0].duration.text
                     };
                     //Markers
-                    mapMarkers.start.lat = res.routes[0].legs[0].start_location.lat;
-                    mapMarkers.start.lng = res.routes[0].legs[0].start_location.lng;
-                    mapMarkers.stop.lat = res.routes[0].legs[0].end_location.lat;
-                    mapMarkers.stop.lng = res.routes[0].legs[0].end_location.lng;
+                    mapMarkers.start.lat = res.routes[0].legs[0].start_location.k;
+                    mapMarkers.start.lng = res.routes[0].legs[0].start_location.B;
+                    mapMarkers.stop.lat = res.routes[0].legs[0].end_location.k;
+                    mapMarkers.stop.lng = res.routes[0].legs[0].end_location.B;
 
-
+                    console.log(res.routes[0].bounds.Ca.j)
                     //Bounds
-                    var ne = [res.routes[0].bounds.northeast.lat, res.routes[0].bounds.northeast.lng];
-                    var sw = [res.routes[0].bounds.southwest.lat, res.routes[0].bounds.southwest.lng];
+                    var ne = [res.routes[0].bounds.Ca.j, res.routes[0].bounds.pa.j];
+                    var sw = [res.routes[0].bounds.Ca.k, res.routes[0].bounds.pa.k];
                     console.log([ne, sw]);
                     var bounds = [ne, sw] 
 
@@ -135,7 +143,7 @@ angular.module('parkingApp')
                         //Fits map to route bounds
                         map.fitBounds(bounds);
                         //Adds circle marker for circle in buffer analysis
-                        L.circle([res.routes[0].legs[0].end_location.lat, res.routes[0].legs[0].end_location.lng], 500, {
+                        L.circle([res.routes[0].legs[0].end_location.k, res.routes[0].legs[0].end_location.B], 500, {
                             color: 'red',
                             fillColor: '#f03',
                             fillOpacity: 0.5
@@ -155,5 +163,5 @@ angular.module('parkingApp')
                 
            
     	};
-    	
+  	
   }]);

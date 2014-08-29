@@ -121,12 +121,6 @@ module.exports = function (grunt) {
                 connect.static('./bower_components')
               ),
               connect.static(appConfig.app),
-              // function(req, res, next) {
-              //   res.setHeader('Access-Control-Allow-Origin', '*');
-              //   res.setHeader('Access-Control-Allow-Methods', 'GET');
-              //   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-              //   next();
-              // }
             ];
           }
         }
